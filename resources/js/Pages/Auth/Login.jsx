@@ -23,15 +23,18 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Connexion" />
+
+            <h1 className="text-lg font-bold text-forest-dark">Connexion</h1>
+            <p className="mt-1 text-sm text-muted">Accédez à votre espace Escale Betega.</p>
 
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
+                <div className="mt-4 rounded-xl bg-success/10 border border-success/20 px-4 py-3 text-sm font-medium text-success">
                     {status}
                 </div>
             )}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} className="mt-6">
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -50,7 +53,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Mot de passe" />
 
                     <TextInput
                         id="password"
@@ -74,24 +77,24 @@ export default function Login({ status, canResetPassword }) {
                                 setData('remember', e.target.checked)
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                            Remember me
+                        <span className="ms-2 text-sm text-ink">
+                            Se souvenir de moi
                         </span>
                     </label>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <div className="mt-6 flex items-center justify-between gap-4">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                            className="text-sm text-muted underline hover:text-forest-dark focus:outline-none"
                         >
-                            Forgot your password?
+                            Mot de passe oublié ?
                         </Link>
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                    <PrimaryButton className="ms-auto" disabled={processing}>
+                        Connexion
                     </PrimaryButton>
                 </div>
             </form>

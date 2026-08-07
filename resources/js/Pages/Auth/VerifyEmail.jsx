@@ -13,35 +13,33 @@ export default function VerifyEmail({ status }) {
 
     return (
         <GuestLayout>
-            <Head title="Email Verification" />
+            <Head title="Vérification de l'email" />
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Thanks for signing up! Before getting started, could you verify
-                your email address by clicking on the link we just emailed to
-                you? If you didn't receive the email, we will gladly send you
-                another.
-            </div>
+            <h1 className="text-lg font-bold text-forest-dark">Vérifiez votre email</h1>
+            <p className="mt-2 text-sm text-muted">
+                Merci de votre inscription ! Cliquez sur le lien que nous venons de vous envoyer par email pour
+                confirmer votre adresse. Vous ne l&rsquo;avez pas reçu ? Nous pouvons vous en renvoyer un.
+            </p>
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
+                <div className="mt-4 rounded-xl bg-success/10 border border-success/20 px-4 py-3 text-sm font-medium text-success">
+                    Un nouveau lien de vérification a été envoyé à l&rsquo;adresse indiquée lors de votre inscription.
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <div className="mt-4 flex items-center justify-between">
+            <form onSubmit={submit} className="mt-6">
+                <div className="flex items-center justify-between gap-4">
                     <PrimaryButton disabled={processing}>
-                        Resend Verification Email
+                        Renvoyer l&rsquo;email
                     </PrimaryButton>
 
                     <Link
                         href={route('logout')}
                         method="post"
                         as="button"
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
+                        className="text-sm text-muted underline hover:text-forest-dark focus:outline-none"
                     >
-                        Log Out
+                        Déconnexion
                     </Link>
                 </div>
             </form>
