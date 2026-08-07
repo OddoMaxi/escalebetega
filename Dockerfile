@@ -60,8 +60,10 @@ RUN addgroup -g 1000 escale && adduser -G escale -u 1000 -D escale \
 COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-USER escale
-
+# Stays root here on purpose: the entrypoint needs to chown freshly
+# mounted volumes (empty/root-owned on first run) before dropping
+# privileges. php-fpm's own master process then forks workers as
+# "escale" per docker/php/www.conf — it never serves requests as root.
 EXPOSE 9000
 
 ENTRYPOINT ["entrypoint.sh"]

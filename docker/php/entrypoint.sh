@@ -18,4 +18,9 @@ php artisan route:cache
 php artisan view:cache
 php artisan storage:link 2>/dev/null || true
 
+# Freshly mounted volumes (public-shared, storage) start out root-owned;
+# php-fpm's workers run as "escale" (see docker/php/www.conf), so fix
+# ownership here, as root, right before dropping into the actual process.
+chown -R escale:escale /var/www/html/public-shared /var/www/html/storage /var/www/html/bootstrap/cache
+
 exec "$@"
