@@ -5,11 +5,12 @@ namespace App\Services\Orders;
 use App\Enums\OrderSource;
 use App\Enums\OrderStatus;
 use App\Enums\SalonStatus;
+use App\Jobs\SendOrderReadySms;
+use App\Jobs\SendOrderReceivedSms;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Salon;
-use App\Services\Sms\SmsService;
 use App\Services\Stock\StockService;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,6 @@ class OrderService
 {
     public function __construct(
         private readonly TableSessionService $tableSessions,
-        private readonly SmsService $sms,
         private readonly StockService $stock,
     ) {
     }
@@ -110,7 +110,7 @@ class OrderService
 
             $this->stock->decrementForOrder($order);
 
-            $this->sms->sendOrderReceived($order);
+            SendOrderReceivedSms::dispatch($order)->afterCommit();
 
             return $order;
         });
@@ -129,7 +129,7 @@ class OrderService
         $order->update(['status' => OrderStatus::Prete]);
         $order->salon->update(['status' => SalonStatus::Prete]);
 
-        $this->sms->sendOrderReady($order);
+        SendOrderReadySms::dispatch($order)->afterCommit();
 
         return $order;
     }

@@ -1,0 +1,21 @@
+name: edge
+
+services:
+  edge_nginx:
+    image: nginx:1.27-alpine
+    container_name: edge_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - koby_koby_net
+      - edge_network
+
+networks:
+  koby_koby_net:
+    external: true
+  edge_network:
+    external: true

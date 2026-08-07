@@ -1,0 +1,124 @@
+name: escale-betega
+
+services:
+  escale_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: escale-betega-app:latest
+    container_name: escale_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      RUN_MIGRATIONS: "true"
+    env_file:
+      - .env
+    volumes:
+      - escale_storage:/var/www/html/storage/app/public
+    networks:
+      - escale_network
+    depends_on:
+      escale_mysql:
+        condition: service_healthy
+      escale_redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php", "-v"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  escale_worker:
+    image: escale-betega-app:latest
+    container_name: escale_worker
+    restart: unless-stopped
+    working_dir: /var/www/html
+    env_file:
+      - .env
+    volumes:
+      - escale_storage:/var/www/html/storage/app/public
+    networks:
+      - escale_network
+    depends_on:
+      escale_app:
+        condition: service_healthy
+    entrypoint: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+
+  escale_nginx:
+    image: nginx:1.27-alpine
+    container_name: escale_nginx
+    restart: unless-stopped
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public:/var/www/html/public:ro
+      - escale_storage:/var/www/html/storage/app/public:ro
+    networks:
+      - escale_network
+    depends_on:
+      - escale_app
+
+  escale_caddy:
+    image: caddy:2-alpine
+    container_name: escale_caddy
+    restart: unless-stopped
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - escale_caddy_data:/data
+      - escale_caddy_config:/config
+    networks:
+      - escale_network
+      - edge_network
+    depends_on:
+      - escale_nginx
+
+  escale_mysql:
+    image: mysql:8.4
+    container_name: escale_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - escale_mysql_data:/var/lib/mysql
+    networks:
+      - escale_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  escale_redis:
+    image: redis:7-alpine
+    container_name: escale_redis
+    restart: unless-stopped
+    volumes:
+      - escale_redis_data:/data
+    networks:
+      - escale_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  escale_network:
+    name: escale_network
+    driver: bridge
+  edge_network:
+    external: true
+
+volumes:
+  escale_mysql_data:
+    name: escale_mysql_data
+  escale_redis_data:
+    name: escale_redis_data
+  escale_storage:
+    name: escale_storage
+  escale_caddy_data:
+    name: escale_caddy_data
+  escale_caddy_config:
+    name: escale_caddy_config
