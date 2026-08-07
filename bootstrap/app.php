@@ -19,6 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\EnsureUserHasRole::class,
         ]);
+
+        // The app only ever sits behind our own Docker-internal proxy chain
+        // (Caddy -> nginx -> php-fpm), never exposed directly, so trusting
+        // all upstream hops here is safe and needed to detect HTTPS/host
+        // correctly for generated URLs.
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
