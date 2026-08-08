@@ -29,8 +29,8 @@ const NAV = [
     { key: 'cash', label: 'Caisse & Finances', icon: Wallet, href: '/admin/caisse', available: true },
     { key: 'expenses', label: 'Dépenses', icon: Receipt, href: '/admin/depenses', available: true },
     { key: 'reports', label: 'Rapports', icon: BarChart3, href: '/admin/rapports', available: true },
-    { key: 'users', label: 'Utilisateurs', icon: UserCog, available: false },
-    { key: 'settings', label: 'Paramètres', icon: Settings, available: false },
+    { key: 'users', label: 'Utilisateurs', icon: UserCog, href: '/admin/utilisateurs', available: true },
+    { key: 'settings', label: 'Paramètres', icon: Settings, href: '/admin/parametres', available: true },
 ];
 
 export default function AdminLayout({ active, title, children }) {

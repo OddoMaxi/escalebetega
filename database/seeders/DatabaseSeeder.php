@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -45,6 +46,16 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+
+        Setting::firstOrCreate([], [
+            'business_name' => 'Escale Betega',
+            'tagline' => "Savourez la nature, vivez l'escale.",
+            'phone' => '+224 620 00 00 00',
+            'whatsapp' => '+224 620 00 00 00',
+            'email' => 'contact@escalebetega.com',
+            'address' => 'Takonko Beach, Conakry',
+            'hours_label' => 'Tous les jours, 09h00 – 23h00',
+        ]);
 
         $this->call([
             SalonSeeder::class,

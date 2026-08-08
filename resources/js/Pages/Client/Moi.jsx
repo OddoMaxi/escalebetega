@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Phone } from 'lucide-react';
 import ClientTopBar from '@/Components/Client/ClientTopBar';
 import BottomNav from '@/Components/Client/BottomNav';
@@ -7,6 +7,7 @@ import useCart from '@/Hooks/useCart';
 
 export default function Moi({ salon }) {
     const cart = useCart(salon.token);
+    const { settings } = usePage().props;
 
     return (
         <>
@@ -24,14 +25,14 @@ export default function Moi({ salon }) {
                     </div>
 
                     <a
-                        href="tel:+224620000000"
+                        href={`tel:${(settings.phone ?? '').replace(/\s/g, '')}`}
                         className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-forest-dark px-6 py-4 text-sm font-semibold text-cream hover:bg-forest transition-colors"
                     >
                         <Phone className="h-4 w-4" />
                         Appeler un serveur
                     </a>
 
-                    <p className="mt-8 text-xs text-muted">Savourez la nature, vivez l&rsquo;escale.</p>
+                    <p className="mt-8 text-xs text-muted">{settings.tagline}</p>
                 </div>
 
                 <BottomNav token={salon.token} active="moi" cartCount={cart.count} />

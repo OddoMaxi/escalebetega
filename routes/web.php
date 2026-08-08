@@ -10,7 +10,9 @@ use App\Http\Controllers\Admin\PurchaseController as AdminPurchaseController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\SalonController as AdminSalonController;
 use App\Http\Controllers\Admin\StockItemController as AdminStockItemController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\SupplierController as AdminSupplierController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Bar\BoardController as BarBoardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
@@ -92,6 +94,21 @@ Route::middleware(['auth', 'role:gerant'])->prefix('admin')->name('admin.')->gro
     Route::get('/clients', [AdminCustomerController::class, 'index'])->name('customers.index');
 
     Route::get('/rapports', [AdminReportController::class, 'index'])->name('reports.index');
+
+    Route::get('/parametres', [AdminSettingController::class, 'edit'])->name('settings.edit');
+    Route::put('/parametres', [AdminSettingController::class, 'update'])->name('settings.update');
+});
+
+// User account management touches role assignment (incl. super_admin), so
+// it's restricted to super_admin only — gérant does not get this one.
+Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/utilisateurs', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/utilisateurs/nouveau', [AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/utilisateurs', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/utilisateurs/{user}/modifier', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/utilisateurs/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::delete('/utilisateurs/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    Route::patch('/utilisateurs/{user}/toggle', [AdminUserController::class, 'toggleActive'])->name('users.toggle');
 });
 
 Route::get('/dashboard', function () {

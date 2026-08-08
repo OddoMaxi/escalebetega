@@ -1,9 +1,11 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Phone, ShoppingBag, UtensilsCrossed, Waves } from 'lucide-react';
 import Logo from '@/Components/Site/Logo';
 import PhotoPlaceholder from '@/Components/Site/PhotoPlaceholder';
 
 export default function Home({ salon }) {
+    const { settings } = usePage().props;
+
     return (
         <>
             <Head title={`Bienvenue au ${salon.name}`} />
@@ -46,7 +48,7 @@ export default function Home({ salon }) {
                     <div className="mt-auto pt-10 text-center">
                         <p className="text-xs text-muted mb-2">Besoin d&rsquo;aide ?</p>
                         <a
-                            href="tel:+224620000000"
+                            href={`tel:${(settings.phone ?? '').replace(/\s/g, '')}`}
                             className="inline-flex items-center gap-2 text-sm font-semibold text-forest-dark"
                         >
                             <Phone className="h-4 w-4" />
