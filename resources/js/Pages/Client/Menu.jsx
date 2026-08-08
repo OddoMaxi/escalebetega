@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { Plus, Search } from 'lucide-react';
 import ClientTopBar from '@/Components/Client/ClientTopBar';
 import BottomNav from '@/Components/Client/BottomNav';
+import CartFloatingBar from '@/Components/Client/CartFloatingBar';
 import useCart from '@/Hooks/useCart';
 
 function formatGnf(amount) {
@@ -44,7 +45,7 @@ export default function Menu({ salon, categories }) {
         <>
             <Head title={`Menu — ${salon.name}`} />
 
-            <div className="min-h-screen bg-base pb-24">
+            <div className="min-h-screen bg-base pb-36">
                 <ClientTopBar token={salon.token} salonName={salon.name} title="Notre Menu" back={`/q/${salon.token}`} />
 
                 <div className="mx-auto max-w-md px-4 pt-4">
@@ -109,6 +110,7 @@ export default function Menu({ salon, categories }) {
                     </div>
                 </div>
 
+                <CartFloatingBar token={salon.token} count={cart.count} subtotal={cart.subtotal} />
                 <BottomNav token={salon.token} active="menu" cartCount={cart.count} />
             </div>
         </>
