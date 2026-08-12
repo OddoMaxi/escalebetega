@@ -88,7 +88,16 @@ export default function Menu({ salon, categories }) {
                                 key={product.id}
                                 className="flex items-center gap-4 rounded-2xl bg-cream border border-black/5 p-3"
                             >
-                                <div className="h-16 w-16 flex-shrink-0 rounded-xl bg-gradient-to-br from-sun to-forest-dark" />
+                                {product.photo ? (
+                                    <img
+                                        src={product.photo}
+                                        alt={product.name}
+                                        loading="lazy"
+                                        className="h-16 w-16 flex-shrink-0 rounded-xl object-cover"
+                                    />
+                                ) : (
+                                    <div className="h-16 w-16 flex-shrink-0 rounded-xl bg-gradient-to-br from-sun to-forest-dark" />
+                                )}
                                 <div className="flex-1 min-w-0">
                                     <p className="font-bold text-sm text-ink truncate">{product.name}</p>
                                     {product.description && (

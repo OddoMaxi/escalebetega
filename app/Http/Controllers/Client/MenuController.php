@@ -27,6 +27,7 @@ class MenuController extends ClientController
                     'name' => $product->name,
                     'description' => $product->description,
                     'price' => $product->price,
+                    'photo' => $product->photo,
                     'available' => $product->available,
                 ]),
             ])

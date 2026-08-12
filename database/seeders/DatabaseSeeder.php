@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
             SalonSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
+            ProductCatalogSeeder::class,
         ]);
     }
 }

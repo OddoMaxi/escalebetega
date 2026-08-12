@@ -162,13 +162,22 @@ export default function Form({ categories, product, stockItems = [] }) {
 
                 <div>
                     <label className="text-xs font-semibold text-muted">Photo (URL, facultatif)</label>
-                    <input
-                        type="text"
-                        value={data.photo}
-                        onChange={(e) => setData('photo', e.target.value)}
-                        placeholder="https://..."
-                        className="mt-1 w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
-                    />
+                    <div className="mt-1 flex items-center gap-3">
+                        {data.photo && (
+                            <img
+                                src={data.photo}
+                                alt=""
+                                className="h-14 w-14 flex-shrink-0 rounded-xl object-cover border border-black/10"
+                            />
+                        )}
+                        <input
+                            type="text"
+                            value={data.photo}
+                            onChange={(e) => setData('photo', e.target.value)}
+                            placeholder="/images/products/exemple.jpg"
+                            className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
+                        />
+                    </div>
                 </div>
 
                 <div className="flex gap-6">

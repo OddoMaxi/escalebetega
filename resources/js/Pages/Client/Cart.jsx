@@ -66,7 +66,15 @@ export default function Cart({ salon }) {
                                         key={item.productId}
                                         className="flex items-center gap-3 rounded-2xl bg-cream border border-black/5 p-3"
                                     >
-                                        <div className="h-12 w-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-sun to-forest-dark" />
+                                        {item.photo ? (
+                                            <img
+                                                src={item.photo}
+                                                alt={item.name}
+                                                className="h-12 w-12 flex-shrink-0 rounded-xl object-cover"
+                                            />
+                                        ) : (
+                                            <div className="h-12 w-12 flex-shrink-0 rounded-xl bg-gradient-to-br from-sun to-forest-dark" />
+                                        )}
                                         <div className="flex-1 min-w-0">
                                             <p className="font-bold text-sm text-ink truncate">{item.name}</p>
                                             <p className="text-xs text-muted">{formatGnf(item.price)}</p>

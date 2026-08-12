@@ -50,6 +50,7 @@ export default function Index({ products, categories }) {
                 <table className="w-full text-sm">
                     <thead>
                         <tr className="text-left text-xs uppercase tracking-wide text-muted border-b border-black/5">
+                            <th className="px-5 py-3 font-semibold" />
                             <th className="px-5 py-3 font-semibold">Produit</th>
                             <th className="px-5 py-3 font-semibold">Catégorie</th>
                             <th className="px-5 py-3 font-semibold">Prix</th>
@@ -60,6 +61,17 @@ export default function Index({ products, categories }) {
                     <tbody>
                         {filtered.map((product) => (
                             <tr key={product.id} className="border-b border-black/5 last:border-0">
+                                <td className="px-5 py-3">
+                                    {product.photo ? (
+                                        <img
+                                            src={product.photo}
+                                            alt={product.name}
+                                            className="h-10 w-10 rounded-lg object-cover"
+                                        />
+                                    ) : (
+                                        <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-sun to-forest-dark" />
+                                    )}
+                                </td>
                                 <td className="px-5 py-3 font-semibold text-ink">{product.name}</td>
                                 <td className="px-5 py-3 text-muted">{product.category}</td>
                                 <td className="px-5 py-3 text-ink">{formatGnf(product.price)}</td>
@@ -96,7 +108,7 @@ export default function Index({ products, categories }) {
 
                         {filtered.length === 0 && (
                             <tr>
-                                <td colSpan={5} className="px-5 py-10 text-center text-muted">
+                                <td colSpan={6} className="px-5 py-10 text-center text-muted">
                                     Aucun produit.
                                 </td>
                             </tr>

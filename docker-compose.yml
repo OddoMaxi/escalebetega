@@ -16,6 +16,7 @@ services:
     volumes:
       - escale_storage:/var/www/html/storage/app/public
       - escale_public_build:/var/www/html/public-shared/build
+      - escale_public_images:/var/www/html/public-shared/images
     networks:
       - escale_network
     depends_on:
@@ -52,6 +53,7 @@ services:
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - escale_public_build:/var/www/html/public/build:ro
+      - escale_public_images:/var/www/html/public/images:ro
       - escale_storage:/var/www/html/public/storage:ro
     networks:
       - escale_network
@@ -121,6 +123,8 @@ volumes:
     name: escale_storage
   escale_public_build:
     name: escale_public_build
+  escale_public_images:
+    name: escale_public_images
   escale_caddy_data:
     name: escale_caddy_data
   escale_caddy_config:

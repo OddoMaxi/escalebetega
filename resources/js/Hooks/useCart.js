@@ -44,6 +44,7 @@ export default function useCart(salonToken) {
                     productId: product.id,
                     name: product.name,
                     price: product.price,
+                    photo: product.photo ?? null,
                     quantity,
                 },
             ];
