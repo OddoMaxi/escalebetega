@@ -38,12 +38,19 @@ class OrderController extends ClientController
 
         abort_unless($order->salon_id === $salon->id, 404);
 
+        $session = $order->tableSession;
+        $ordersCount = $session ? $session->orders()->count() : 1;
+
         return Inertia::render('Client/Confirmation', [
             'salon' => ['token' => $salon->qr_token, 'name' => $salon->name],
             'order' => [
                 'id' => $order->id,
                 'number' => $order->order_number,
             ],
+            'session' => $session ? [
+                'ordersCount' => $ordersCount,
+                'total' => $session->total,
+            ] : null,
         ]);
     }
 

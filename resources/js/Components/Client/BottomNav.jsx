@@ -1,16 +1,17 @@
 import { Link } from '@inertiajs/react';
-import { Globe, ShoppingBag, User, UtensilsCrossed } from 'lucide-react';
+import { Globe, Receipt, ShoppingBag, User, UtensilsCrossed } from 'lucide-react';
 
 export default function BottomNav({ token, active, cartCount = 0 }) {
     const items = [
         { key: 'menu', label: 'Menu', icon: UtensilsCrossed, href: `/q/${token}/menu` },
         { key: 'panier', label: 'Panier', icon: ShoppingBag, href: `/q/${token}/panier`, badge: cartCount },
+        { key: 'addition', label: 'Addition', icon: Receipt, href: `/q/${token}/addition` },
         { key: 'moi', label: 'Moi', icon: User, href: `/q/${token}/moi` },
     ];
 
     return (
         <nav className="fixed bottom-0 inset-x-0 z-40 bg-cream/95 backdrop-blur border-t border-black/5 pb-[env(safe-area-inset-bottom)]">
-            <div className="mx-auto max-w-md grid grid-cols-4">
+            <div className="mx-auto max-w-md grid grid-cols-5">
                 {items.map((item) => {
                     const isActive = active === item.key;
                     return (

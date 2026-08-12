@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\SupplierController as AdminSupplierController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Bar\BoardController as BarBoardController;
+use App\Http\Controllers\Client\AdditionController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\MenuController;
 use App\Http\Controllers\Client\MoiController;
@@ -32,6 +33,7 @@ Route::prefix('q/{token}')->name('client.')->group(function () {
     Route::get('/', [MenuController::class, 'index'])->name('home');
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
     Route::get('/panier', [CartController::class, 'show'])->name('cart');
+    Route::get('/addition', [AdditionController::class, 'show'])->name('addition');
     Route::get('/moi', [MoiController::class, 'show'])->name('moi');
     Route::post('/commandes', [ClientOrderController::class, 'store'])->name('orders.store');
     Route::get('/commandes/{order}/confirmation', [ClientOrderController::class, 'confirmation'])->name('orders.confirmation');

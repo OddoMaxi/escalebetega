@@ -11,6 +11,7 @@ class MenuController extends ClientController
     public function index(string $token): Response
     {
         $salon = $this->resolveSalon($token);
+        $session = $salon->activeSession();
 
         $categories = Category::query()
             ->where('visible', true)
@@ -40,6 +41,10 @@ class MenuController extends ClientController
                 'name' => $salon->name,
             ],
             'categories' => $categories,
+            'session' => $session ? [
+                'ordersCount' => $session->orders()->count(),
+                'total' => $session->total,
+            ] : null,
         ]);
     }
 }
