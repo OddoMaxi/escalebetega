@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers\Serveur;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Enums\SalonStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Salon;
+use App\Services\Orders\PaymentService;
 use App\Services\Orders\TableSessionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use RuntimeException;
 
 class SalonController extends Controller
 {
-    public function __construct(private readonly TableSessionService $tableSessions)
-    {
+    public function __construct(
+        private readonly TableSessionService $tableSessions,
+        private readonly PaymentService $payments,
+    ) {
     }
 
     public function index(): Response
@@ -57,6 +63,7 @@ class SalonController extends Controller
             'session' => $session ? [
                 'id' => $session->id,
                 'total' => $session->total,
+                'remaining' => $session->remaining(),
                 'hasPayments' => $session->payments()->exists(),
                 'orders' => $session->orders->map(fn ($order) => [
                     'id' => $order->id,
@@ -71,6 +78,30 @@ class SalonController extends Controller
             ] : null,
             'otherSalons' => $otherSalons,
         ]);
+    }
+
+    public function pay(Request $request, Salon $salon): RedirectResponse
+    {
+        $data = $request->validate([
+            'method' => ['required', 'string', 'in:especes,orange_money,mobile_money,carte,autre'],
+        ]);
+
+        $session = $salon->activeSession();
+
+        if (! $session) {
+            return back()->with('error', 'Aucune session active sur ce salon.');
+        }
+
+        $this->payments->recordPayment(
+            $session,
+            $session->remaining(),
+            PaymentMethod::from($data['method']),
+            Auth::id(),
+        );
+
+        $session->orders()->where('status', OrderStatus::Payee)->update(['status' => OrderStatus::Terminee]);
+
+        return redirect()->route('serveur.salons')->with('success', "{$salon->name} encaissé et libéré.");
     }
 
     public function transfer(Request $request, Salon $salon): RedirectResponse

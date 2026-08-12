@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import ClientTopBar from '@/Components/Client/ClientTopBar';
 import BottomNav from '@/Components/Client/BottomNav';
-import useCart from '@/Hooks/useCart';
+import useCart, { clearCartStorage } from '@/Hooks/useCart';
 
 function formatGnf(amount) {
     return `${new Intl.NumberFormat('fr-FR').format(amount)} GNF`;
@@ -33,7 +33,7 @@ export default function Cart({ salon }) {
                 customer_phone: phone || null,
             },
             {
-                onSuccess: () => cart.clear(),
+                onSuccess: () => clearCartStorage(salon.token),
                 onError: () => setError('Une erreur est survenue. Merci de réessayer.'),
                 onFinish: () => setSubmitting(false),
             },

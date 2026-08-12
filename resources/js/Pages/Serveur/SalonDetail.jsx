@@ -1,11 +1,19 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { AlertCircle, ArrowLeftRight, ChevronLeft, Combine, Split } from 'lucide-react';
+import { AlertCircle, ArrowLeftRight, ChevronLeft, Combine, CreditCard, Split } from 'lucide-react';
 import { salonStatusMeta } from '@/Utils/salonStatus';
 
 function formatGnf(amount) {
     return `${new Intl.NumberFormat('fr-FR').format(amount)} GNF`;
 }
+
+const PAYMENT_METHODS = [
+    { value: 'especes', label: 'Espèces' },
+    { value: 'orange_money', label: 'Orange Money' },
+    { value: 'mobile_money', label: 'Mobile Money' },
+    { value: 'carte', label: 'Carte' },
+    { value: 'autre', label: 'Autre' },
+];
 
 const STATUS_LABELS = {
     nouvelle: 'Nouvelle',
@@ -26,6 +34,8 @@ export default function SalonDetail({ salon, session, otherSalons }) {
     const [selectedOrderIds, setSelectedOrderIds] = useState([]);
     const [targetSalonId, setTargetSalonId] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('especes');
+    const [paying, setPaying] = useState(false);
 
     const meta = salonStatusMeta(salon.status);
     const freeSalons = otherSalons.filter((s) => s.free);
@@ -56,6 +66,14 @@ export default function SalonDetail({ salon, session, otherSalons }) {
         setSubmitting(true);
         router.post(`/serveur/salons/${salon.id}/fusionner`, { from_salon_id: targetSalonId }, {
             onFinish: () => setSubmitting(false),
+        });
+    };
+
+    const confirmPay = () => {
+        if (!confirm(`Confirmer l'encaissement de ${formatGnf(session.remaining)} et libérer ${salon.name} ?`)) return;
+        setPaying(true);
+        router.post(`/serveur/salons/${salon.id}/encaisser`, { method: paymentMethod }, {
+            onFinish: () => setPaying(false),
         });
     };
 
@@ -137,6 +155,35 @@ export default function SalonDetail({ salon, session, otherSalons }) {
                         <div className="mx-4 mt-3 flex justify-between rounded-xl bg-forest-dark/5 px-4 py-3 text-sm">
                             <span className="font-semibold text-ink">Total session</span>
                             <span className="font-bold text-forest-dark">{formatGnf(session.total)}</span>
+                        </div>
+
+                        <div className="mx-4 mt-4 rounded-xl border border-black/10 p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                                <CreditCard className="h-4 w-4 text-forest-dark" />
+                                <p className="text-sm font-bold text-ink">Encaisser cette table</p>
+                            </div>
+                            <div className="flex justify-between text-sm mb-3">
+                                <span className="text-muted">Restant à payer</span>
+                                <span className="font-bold text-forest-dark">{formatGnf(session.remaining)}</span>
+                            </div>
+                            <select
+                                value={paymentMethod}
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                className="w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
+                            >
+                                {PAYMENT_METHODS.map((method) => (
+                                    <option key={method.value} value={method.value}>
+                                        {method.label}
+                                    </option>
+                                ))}
+                            </select>
+                            <button
+                                onClick={confirmPay}
+                                disabled={paying}
+                                className="mt-3 w-full rounded-xl bg-forest-dark px-4 py-3 text-sm font-semibold text-cream hover:bg-forest transition-colors disabled:opacity-50"
+                            >
+                                {paying ? 'Encaissement...' : `Encaisser ${formatGnf(session.remaining)} et libérer la table`}
+                            </button>
                         </div>
 
                         {session.hasPayments ? (

@@ -19,6 +19,11 @@ function writeCart(salonToken, items) {
     window.localStorage.setItem(storageKey(salonToken), JSON.stringify(items));
 }
 
+export function clearCartStorage(salonToken) {
+    if (typeof window === 'undefined') return;
+    window.localStorage.removeItem(storageKey(salonToken));
+}
+
 export default function useCart(salonToken) {
     const [items, setItems] = useState(() => readCart(salonToken));
 
