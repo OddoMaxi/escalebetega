@@ -46,7 +46,7 @@ export default function Menu({ salon, categories }) {
             <Head title={`Menu — ${salon.name}`} />
 
             <div className="min-h-screen bg-base pb-36">
-                <ClientTopBar token={salon.token} salonName={salon.name} title="Notre Menu" back={`/q/${salon.token}`} />
+                <ClientTopBar token={salon.token} salonName={salon.name} title="Notre Menu" />
 
                 <div className="mx-auto max-w-md px-4 pt-4">
                     <div className="relative">

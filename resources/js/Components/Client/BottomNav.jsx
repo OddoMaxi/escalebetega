@@ -1,9 +1,8 @@
 import { Link } from '@inertiajs/react';
-import { Home, ShoppingBag, User, UtensilsCrossed } from 'lucide-react';
+import { Globe, ShoppingBag, User, UtensilsCrossed } from 'lucide-react';
 
 export default function BottomNav({ token, active, cartCount = 0 }) {
     const items = [
-        { key: 'accueil', label: 'Accueil', icon: Home, href: `/q/${token}` },
         { key: 'menu', label: 'Menu', icon: UtensilsCrossed, href: `/q/${token}/menu` },
         { key: 'panier', label: 'Panier', icon: ShoppingBag, href: `/q/${token}/panier`, badge: cartCount },
         { key: 'moi', label: 'Moi', icon: User, href: `/q/${token}/moi` },
@@ -32,6 +31,16 @@ export default function BottomNav({ token, active, cartCount = 0 }) {
                         </Link>
                     );
                 })}
+
+                <a
+                    href="/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center gap-1 py-3 text-xs font-medium text-muted"
+                >
+                    <Globe className="h-5 w-5" strokeWidth={1.75} />
+                    Le site
+                </a>
             </div>
         </nav>
     );

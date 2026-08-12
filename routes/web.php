@@ -15,7 +15,6 @@ use App\Http\Controllers\Admin\SupplierController as AdminSupplierController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Bar\BoardController as BarBoardController;
 use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\MenuController;
 use App\Http\Controllers\Client\MoiController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
@@ -30,7 +29,7 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('q/{token}')->name('client.')->group(function () {
-    Route::get('/', [ClientHomeController::class, 'show'])->name('home');
+    Route::get('/', [MenuController::class, 'index'])->name('home');
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
     Route::get('/panier', [CartController::class, 'show'])->name('cart');
     Route::get('/moi', [MoiController::class, 'show'])->name('moi');
