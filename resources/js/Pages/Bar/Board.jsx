@@ -1,5 +1,6 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { useEffect } from 'react';
+import { LogOut } from 'lucide-react';
 import Logo from '@/Components/Site/Logo';
 import OrderCard from '@/Components/Bar/OrderCard';
 
@@ -34,6 +35,15 @@ export default function Board({ columns }) {
                 <header className="px-6 py-6 flex items-center justify-between border-b border-black/5 bg-cream">
                     <Logo size="sm" showTagline={false} />
                     <h1 className="text-lg font-extrabold text-forest-dark">Écran de préparation</h1>
+                    <Link
+                        href="/logout"
+                        method="post"
+                        as="button"
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted hover:text-forest-dark"
+                    >
+                        <LogOut className="h-4 w-4" />
+                        Déconnexion
+                    </Link>
                 </header>
 
                 <div className="grid md:grid-cols-3 gap-4 p-4 md:p-6">
