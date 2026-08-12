@@ -42,6 +42,10 @@ Route::prefix('q/{token}')->name('client.')->group(function () {
 Route::middleware(['auth', 'role:serveur,gerant'])->prefix('serveur')->name('serveur.')->group(function () {
     Route::get('/', [ServeurHomeController::class, 'index'])->name('home');
     Route::get('/salons', [ServeurSalonController::class, 'index'])->name('salons');
+    Route::get('/salons/{salon}', [ServeurSalonController::class, 'show'])->name('salons.show');
+    Route::post('/salons/{salon}/transferer', [ServeurSalonController::class, 'transfer'])->name('salons.transfer');
+    Route::post('/salons/{salon}/fusionner', [ServeurSalonController::class, 'merge'])->name('salons.merge');
+    Route::post('/salons/{salon}/diviser', [ServeurSalonController::class, 'split'])->name('salons.split');
     Route::get('/commandes', [ServeurOrderController::class, 'index'])->name('orders.index');
     Route::get('/commandes/nouvelle', [ServeurOrderController::class, 'create'])->name('orders.create');
     Route::post('/commandes', [ServeurOrderController::class, 'store'])->name('orders.store');
