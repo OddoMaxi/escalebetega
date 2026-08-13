@@ -48,6 +48,7 @@ class OrderController extends ClientController
                 'number' => $order->order_number,
             ],
             'session' => $session ? [
+                'id' => $session->id,
                 'ordersCount' => $ordersCount,
                 'total' => $session->total,
             ] : null,

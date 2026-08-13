@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from '@inertiajs/react';
 import { QrCode, Menu, X } from 'lucide-react';
 import Logo from './Logo';
 
@@ -34,13 +35,13 @@ export default function Header() {
                         ))}
                     </nav>
 
-                    <a
-                        href="#qr-cta"
+                    <Link
+                        href="/commander"
                         className="hidden lg:inline-flex items-center gap-2 rounded-xl bg-forest-dark px-5 py-3 text-sm font-semibold text-cream hover:bg-forest transition-colors"
                     >
-                        Commander par QR code
+                        Commander maintenant
                         <QrCode className="h-4 w-4" strokeWidth={2} />
-                    </a>
+                    </Link>
 
                     <button
                         onClick={() => setOpen(!open)}
@@ -63,14 +64,14 @@ export default function Header() {
                                 {link.label}
                             </a>
                         ))}
-                        <a
-                            href="#qr-cta"
+                        <Link
+                            href="/commander"
                             onClick={() => setOpen(false)}
                             className="inline-flex items-center justify-center gap-2 rounded-xl bg-forest-dark px-5 py-3 text-sm font-semibold text-cream"
                         >
-                            Commander par QR code
+                            Commander maintenant
                             <QrCode className="h-4 w-4" />
-                        </a>
+                        </Link>
                     </nav>
                 )}
             </div>

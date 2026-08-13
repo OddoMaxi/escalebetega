@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { ArrowRight, Bell, Repeat, Zap } from 'lucide-react';
 import Logo from './Logo';
 import QrPattern from './QrPattern';
@@ -23,13 +24,13 @@ export default function QrCta() {
                         <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-cream leading-tight">
                             Scannez le QR code de votre salon et commandez en quelques clics.
                         </h2>
-                        <a
-                            href="#experience"
+                        <Link
+                            href="/commander"
                             className="mt-8 inline-flex items-center gap-2 rounded-xl bg-cream px-6 py-3.5 text-sm font-semibold text-forest-dark hover:bg-white transition-colors"
                         >
-                            En savoir plus
+                            Je suis sur place, commander
                             <ArrowRight className="h-4 w-4" />
-                        </a>
+                        </Link>
                     </div>
 
                     <div className="flex justify-center">

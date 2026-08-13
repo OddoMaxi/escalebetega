@@ -24,10 +24,12 @@ use App\Http\Controllers\Serveur\HomeController as ServeurHomeController;
 use App\Http\Controllers\Serveur\OrderController as ServeurOrderController;
 use App\Http\Controllers\Serveur\SalonController as ServeurSalonController;
 use App\Http\Controllers\Site\HomeController;
+use App\Http\Controllers\Site\TableSelectController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/commander', [TableSelectController::class, 'index'])->name('site.order-select');
 
 Route::prefix('q/{token}')->name('client.')->group(function () {
     Route::get('/', [MenuController::class, 'index'])->name('home');

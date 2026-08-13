@@ -1,10 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Plus, Receipt, Search } from 'lucide-react';
 import ClientTopBar from '@/Components/Client/ClientTopBar';
 import BottomNav from '@/Components/Client/BottomNav';
 import CartFloatingBar from '@/Components/Client/CartFloatingBar';
 import useCart from '@/Hooks/useCart';
+import { storeSessionId } from '@/Hooks/useClientSession';
 
 function formatGnf(amount) {
     return `${new Intl.NumberFormat('fr-FR').format(amount)} GNF`;
@@ -14,6 +15,10 @@ export default function Menu({ salon, categories, session }) {
     const cart = useCart(salon.token);
     const [activeCategory, setActiveCategory] = useState(categories[0]?.id ?? null);
     const [search, setSearch] = useState('');
+
+    useEffect(() => {
+        if (session?.id) storeSessionId(salon.token, session.id);
+    }, [salon.token, session?.id]);
 
     const filteredCategories = useMemo(() => {
         if (!search.trim()) {
@@ -51,7 +56,7 @@ export default function Menu({ salon, categories, session }) {
                 <div className="mx-auto max-w-md px-4 pt-4">
                     {session && (
                         <Link
-                            href={`/q/${salon.token}/addition`}
+                            href={`/q/${salon.token}/addition?session=${session.id}`}
                             className="mb-4 flex items-center justify-between rounded-xl bg-sun/15 border border-sun/30 px-4 py-3"
                         >
                             <div className="flex items-center gap-2.5">

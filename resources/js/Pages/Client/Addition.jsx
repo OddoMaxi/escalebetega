@@ -1,8 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
-import { Receipt, Clock } from 'lucide-react';
+import { useEffect } from 'react';
+import { CheckCircle2, Clock, Receipt } from 'lucide-react';
 import ClientTopBar from '@/Components/Client/ClientTopBar';
 import BottomNav from '@/Components/Client/BottomNav';
 import useCart from '@/Hooks/useCart';
+import { storeSessionId } from '@/Hooks/useClientSession';
 
 function formatGnf(amount) {
     return `${new Intl.NumberFormat('fr-FR').format(amount)} GNF`;
@@ -35,6 +37,12 @@ const STATUS_CLASSES = {
 export default function Addition({ salon, session }) {
     const cart = useCart(salon.token);
 
+    useEffect(() => {
+        if (session?.id) storeSessionId(salon.token, session.id);
+    }, [salon.token, session?.id]);
+
+    const isPaid = session?.closed;
+
     return (
         <>
             <Head title={`Mon addition — ${salon.name}`} />
@@ -56,13 +64,23 @@ export default function Addition({ salon, session }) {
                         </div>
                     ) : (
                         <>
-                            <div className="rounded-2xl bg-sun/15 border border-sun/30 px-4 py-3 flex items-start gap-2.5">
-                                <Clock className="h-4 w-4 text-wood flex-shrink-0 mt-0.5" />
-                                <p className="text-xs text-wood leading-snug">
-                                    Addition ouverte à {session.openedAt}. Toutes vos commandes s&rsquo;ajoutent ici
-                                    jusqu&rsquo;au règlement, à faire directement auprès d&rsquo;un serveur.
-                                </p>
-                            </div>
+                            {isPaid ? (
+                                <div className="rounded-2xl bg-success/10 border border-success/20 px-4 py-3 flex items-start gap-2.5">
+                                    <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0 mt-0.5" />
+                                    <p className="text-xs text-success leading-snug">
+                                        Cette addition a été réglée. Merci pour votre visite &mdash; à bientôt sur la
+                                        plage&nbsp;!
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="rounded-2xl bg-sun/15 border border-sun/30 px-4 py-3 flex items-start gap-2.5">
+                                    <Clock className="h-4 w-4 text-wood flex-shrink-0 mt-0.5" />
+                                    <p className="text-xs text-wood leading-snug">
+                                        Addition ouverte à {session.openedAt}. Toutes vos commandes s&rsquo;ajoutent ici
+                                        jusqu&rsquo;au règlement, à faire directement auprès d&rsquo;un serveur.
+                                    </p>
+                                </div>
+                            )}
 
                             <div className="mt-4 flex flex-col gap-3">
                                 {session.orders.map((order) => (
@@ -101,13 +119,19 @@ export default function Addition({ salon, session }) {
                                 ))}
                             </div>
 
-                            <div className="mt-4 rounded-2xl bg-forest-dark px-5 py-4 flex items-center justify-between">
+                            <div
+                                className={`mt-4 rounded-2xl px-5 py-4 flex items-center justify-between ${
+                                    isPaid ? 'bg-forest' : 'bg-forest-dark'
+                                }`}
+                            >
                                 <div>
-                                    <p className="text-xs uppercase tracking-widest text-cream/60">Total à régler</p>
+                                    <p className="text-xs uppercase tracking-widest text-cream/60">
+                                        {isPaid ? 'Total réglé' : 'Total à régler'}
+                                    </p>
                                     <p className="text-xl font-extrabold text-cream">{formatGnf(session.total)}</p>
                                 </div>
                                 <span className="text-xs font-bold rounded-full bg-cream/15 text-cream px-3 py-1.5">
-                                    Non payé
+                                    {isPaid ? 'Payée ✓' : 'Non payé'}
                                 </span>
                             </div>
 
@@ -115,7 +139,7 @@ export default function Addition({ salon, session }) {
                                 href={`/q/${salon.token}/menu`}
                                 className="mt-4 mb-4 inline-flex w-full items-center justify-center rounded-xl border border-forest-dark/30 px-6 py-3.5 text-sm font-semibold text-forest-dark hover:bg-forest-dark/5 transition-colors"
                             >
-                                Ajouter une commande
+                                {isPaid ? 'Commander à nouveau' : 'Ajouter une commande'}
                             </Link>
                         </>
                     )}

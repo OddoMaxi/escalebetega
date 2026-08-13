@@ -42,6 +42,7 @@ class MenuController extends ClientController
             ],
             'categories' => $categories,
             'session' => $session ? [
+                'id' => $session->id,
                 'ordersCount' => $session->orders()->count(),
                 'total' => $session->total,
             ] : null,

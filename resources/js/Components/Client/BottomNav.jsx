@@ -1,11 +1,12 @@
 import { Link } from '@inertiajs/react';
 import { Globe, Receipt, ShoppingBag, User, UtensilsCrossed } from 'lucide-react';
+import { additionHref } from '@/Hooks/useClientSession';
 
 export default function BottomNav({ token, active, cartCount = 0 }) {
     const items = [
         { key: 'menu', label: 'Menu', icon: UtensilsCrossed, href: `/q/${token}/menu` },
         { key: 'panier', label: 'Panier', icon: ShoppingBag, href: `/q/${token}/panier`, badge: cartCount },
-        { key: 'addition', label: 'Addition', icon: Receipt, href: `/q/${token}/addition` },
+        { key: 'addition', label: 'Addition', icon: Receipt, href: additionHref(token) },
         { key: 'moi', label: 'Moi', icon: User, href: `/q/${token}/moi` },
     ];
 

@@ -1,5 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
+import { useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { storeSessionId } from '@/Hooks/useClientSession';
 
 function formatGnf(amount) {
     return `${new Intl.NumberFormat('fr-FR').format(amount)} GNF`;
@@ -7,6 +9,10 @@ function formatGnf(amount) {
 
 export default function Confirmation({ salon, order, session }) {
     const isRepeatOrder = session && session.ordersCount > 1;
+
+    useEffect(() => {
+        if (session?.id) storeSessionId(salon.token, session.id);
+    }, [salon.token, session?.id]);
 
     return (
         <>
@@ -49,7 +55,7 @@ export default function Confirmation({ salon, order, session }) {
                     </Link>
                     {session && (
                         <Link
-                            href={`/q/${salon.token}/addition`}
+                            href={`/q/${salon.token}/addition?session=${session.id}`}
                             className="inline-flex items-center justify-center rounded-xl border border-forest-dark/30 px-6 py-3.5 text-sm font-semibold text-forest-dark hover:bg-forest-dark/5 transition-colors"
                         >
                             Voir mon addition
